@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ベンチプレス成長率スコア計算</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 500px;
+      margin: auto;
+      padding: 1em;
+      background: #f9f9f9;
+    }
+    h2 {
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin-top: 1em;
+    }
+    input {
+      width: 100%;
+      padding: 0.5em;
+      margin-top: 0.3em;
+      font-size: 1em;
+    }
+    button {
+      width: 100%;
+      padding: 0.8em;
+      margin-top: 1.5em;
+      font-size: 1.2em;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+    }
+    #result {
+      margin-top: 1.5em;
+      font-size: 1.3em;
+      font-weight: bold;
+      text-align: center;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <h2>ベンチプレス成長率スコア計算</h2>
+  <label>
+    初回重量 (kg):
+    <input type="number" id="L0" step="0.1">
+  </label>
+  <label>
+    年明け重量 (kg):
+    <input type="number" id="L1" step="0.1">
+  </label>
+  <label>
+    年明け体重 (kg):
+    <input type="number" id="BW1" step="0.1">
+  </label>
+  <button onclick="calculateScore()">計算する</button>
+  <div id="result"></div>
+
+  <script>
+    function calculateScore() {
+      const L0 = parseFloat(document.getElementById("L0").value);
+      const L1 = parseFloat(document.getElementById("L1").value);
+      const BW1 = parseFloat(document.getElementById("BW1").value);
+
+      if (isNaN(L0) || isNaN(L1) || isNaN(BW1) || BW1 <= 0) {
+        document.getElementById("result").innerText = "入力値を確認してください。";
+        return;
+      }
+
+      const score = (L1 - L0) * (1 + 0.15 * (L1 / BW1));
+      const rounded = Math.round(score * 10) / 10; // 小数1位に四捨五入
+      document.getElementById("result").innerText = "スコア: " + rounded;
+    }
+  </script>
+</body>
+</html>
