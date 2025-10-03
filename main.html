@@ -5,67 +5,73 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ベンチプレス成長率スコア計算</title>
   <style>
-    /* 全体デザイン */
     @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
     body {
       font-family: 'Fredoka One', sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #f9d423, #ff4e50);
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      color: #fff;
+      color: #333;
     }
 
     h1 {
-      margin-top: 40px;
-      font-size: 2em;
+      margin: 25px 10px;
+      font-size: 1.8em;
       text-align: center;
-      text-shadow: 2px 2px #333;
     }
 
-    .container {
-      background: rgba(255, 255, 255, 0.1);
+    .card {
+      background: white;
       padding: 20px;
-      margin: 20px;
+      margin: 10px;
       border-radius: 20px;
       width: 90%;
       max-width: 400px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      backdrop-filter: blur(10px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
     }
 
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-      font-size: 1.1em;
+    .step-title {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step-title span {
+      font-size: 1.4em;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
+      padding: 12px;
+      margin-top: 8px;
       border-radius: 10px;
-      border: none;
+      border: 2px solid #ddd;
       font-size: 1em;
       text-align: center;
       outline: none;
+      transition: border-color 0.2s;
+    }
+    input:focus {
+      border-color: #ff6f61;
     }
 
     button {
       width: 100%;
       padding: 15px;
-      margin-top: 25px;
-      font-size: 1.2em;
+      margin: 20px 0 0 0;
+      font-size: 1.1em;
       font-weight: bold;
       border: none;
-      border-radius: 15px;
+      border-radius: 12px;
       cursor: pointer;
-      background: linear-gradient(90deg, #00c6ff, #0072ff);
+      background: linear-gradient(90deg, #36d1dc, #5b86e5);
       color: white;
       transition: transform 0.2s;
     }
@@ -75,47 +81,66 @@
     }
 
     #result {
-      margin-top: 25px;
+      margin-top: 20px;
       font-size: 1.5em;
       font-weight: bold;
       text-align: center;
       padding: 15px;
       border-radius: 15px;
-      background: rgba(0,0,0,0.2);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      background: rgba(255, 111, 97, 0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
       min-height: 50px;
       transition: all 0.3s ease;
     }
 
+    .comment {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 1em;
+    }
+
     .footer {
       margin-top: auto;
-      padding: 20px;
-      font-size: 0.9em;
+      padding: 15px;
+      font-size: 0.8em;
       text-align: center;
-      color: #fff;
-      opacity: 0.8;
+      opacity: 0.7;
     }
   </style>
 </head>
 <body>
   <h1>🏋️‍♂️ ベンチプレス成長率スコア計算 🏋️‍♀️</h1>
-  <div class="container">
-    <label>初回重量 (kg):</label>
+
+  <!-- Step 1 -->
+  <div class="card">
+    <div class="step-title"><span>🏁</span> Step 1: 初回重量 (kg)</div>
     <input type="number" id="L0" step="0.1" placeholder="例: 50">
+    <small>10/9に測ったベンチプレス1RM</small>
+  </div>
 
-    <label>年明け重量 (kg):</label>
+  <!-- Step 2 -->
+  <div class="card">
+    <div class="step-title"><span>🎉</span> Step 2: 年明け重量 (kg)</div>
     <input type="number" id="L1" step="0.1" placeholder="例: 60">
+    <small>今回の最新ベンチプレス1RM</small>
+  </div>
 
-    <label>年明け体重 (kg):</label>
+  <!-- Step 3 -->
+  <div class="card">
+    <div class="step-title"><span>⚖️</span> Step 3: 年明け体重 (kg)</div>
     <input type="number" id="BW1" step="0.1" placeholder="例: 55">
+    <small>測定当日の体重</small>
+  </div>
 
-    <button onclick="calculateScore()">💪 計算する 💪</button>
-
+  <!-- 計算ボタン -->
+  <div class="card">
+    <button onclick="calculateScore()">💪 スコアを計算 💪</button>
     <div id="result">スコアがここに表示されます</div>
+    <div class="comment" id="comment"></div>
   </div>
 
   <div class="footer">
-    ルール：Score = (年明け重量 - 初回重量) × (1 + 0.15 × 年明け重量 ÷ 年明け体重)
+    ルール: Score = (年明け重量 - 初回重量) × (1 + 0.15 × 年明け重量 ÷ 年明け体重)
   </div>
 
   <script>
@@ -124,21 +149,37 @@
       const L1 = parseFloat(document.getElementById("L1").value);
       const BW1 = parseFloat(document.getElementById("BW1").value);
       const resultDiv = document.getElementById("result");
+      const commentDiv = document.getElementById("comment");
 
       if (isNaN(L0) || isNaN(L1) || isNaN(BW1) || BW1 <= 0) {
         resultDiv.innerText = "⚠️ 入力値を確認してください！";
+        commentDiv.innerText = "";
+        return;
+      }
+
+      if (L1 <= L0) {
+        resultDiv.innerText = "😅 年明け重量は初回より大きくしてください！";
+        commentDiv.innerText = "";
         return;
       }
 
       const score = (L1 - L0) * (1 + 0.15 * (L1 / BW1));
       const rounded = Math.round(score * 10) / 10;
 
-      // アニメーション的にスコアを表示
       resultDiv.style.transform = "scale(1.2)";
       resultDiv.innerText = "🏆 スコア: " + rounded + " 🏆";
       setTimeout(() => {
         resultDiv.style.transform = "scale(1)";
       }, 300);
+
+      // コメント
+      if (rounded >= 15) {
+        commentDiv.innerText = "🔥 爆伸び！筋肉モンスター級！";
+      } else if (rounded >= 8) {
+        commentDiv.innerText = "💪 いい成長！来年も期待！";
+      } else {
+        commentDiv.innerText = "👍 着実な伸び！継続は力なり！";
+      }
     }
   </script>
 </body>
