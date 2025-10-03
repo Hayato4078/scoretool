@@ -113,23 +113,23 @@
 
   <!-- Step 1 -->
   <div class="card">
-    <div class="step-title"><span>🏁</span> Step 1: 初回重量 (kg)</div>
+    <div class="step-title"><span>🎬</span> Step 1: 初回測定の重量 (kg)</div>
     <input type="number" id="L0" step="0.1" placeholder="例: 50">
-    <small>10/9に測ったベンチプレス1RM</small>
+    <small>はじめて測ったときのベンチプレス重量</small>
   </div>
 
   <!-- Step 2 -->
   <div class="card">
-    <div class="step-title"><span>🎉</span> Step 2: 年明け重量 (kg)</div>
+    <div class="step-title"><span>🏁</span> Step 2: 年明けの重量 (kg)</div>
     <input type="number" id="L1" step="0.1" placeholder="例: 60">
-    <small>今回の最新ベンチプレス1RM</small>
+    <small>年明けに測ったベンチプレス重量</small>
   </div>
 
   <!-- Step 3 -->
   <div class="card">
-    <div class="step-title"><span>⚖️</span> Step 3: 年明け体重 (kg)</div>
+    <div class="step-title"><span>⚖️</span> Step 3: 年明けの体重 (kg)</div>
     <input type="number" id="BW1" step="0.1" placeholder="例: 55">
-    <small>測定当日の体重</small>
+    <small>年明けの体重</small>
   </div>
 
   <!-- 計算ボタン -->
@@ -140,7 +140,7 @@
   </div>
 
   <div class="footer">
-    ルール: Score = (年明け重量 - 初回重量) × (1 + 0.15 × 年明け重量 ÷ 年明け体重)
+    ルール: Score = (年明け重量 - 初回測定重量) × (1 + 0.15 × 年明け重量 ÷ 年明け体重)
   </div>
 
   <script>
@@ -158,7 +158,7 @@
       }
 
       if (L1 <= L0) {
-        resultDiv.innerText = "😅 年明け重量は初回より大きくしてください！";
+        resultDiv.innerText = "😅 年明けの重量は初回より大きくしてください！";
         commentDiv.innerText = "";
         return;
       }
